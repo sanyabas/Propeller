@@ -13,12 +13,12 @@
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/
+#[Rr]elease/
 [Rr]eleases/
 x64/
 x86/
 bld/
-[Bb]in/
+#[Bb]in/
 [Oo]bj/
 [Ll]og/
 
@@ -259,3 +259,30 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/.vscode
+/.vscode/launch.json
+/.vscode
+/Propeller/Release
+/Test/Release/Test.tlog
+/PropellerVisualization/bin/Release/report_75
+/PropellerVisualization/bin/Release/report_70
+/PropellerVisualization/bin/Release/report_65
+/PropellerVisualization/bin/Release/report_60
+/PropellerVisualization/bin/Release/report_55
+/PropellerVisualization/bin/Release/report_50_2
+/PropellerVisualization/bin/Release/report_50
+/PropellerVisualization/bin/Release/report_45
+/PropellerVisualization/bin/Release/report_40
+/PropellerVisualization/bin/Release/report_35
+/PropellerVisualization/bin/Release/report_30_3
+/PropellerVisualization/bin/Release/report_30_2
+/PropellerVisualization/bin/Release/report_30
+/PropellerVisualization/bin/Release/report_25_2
+/PropellerVisualization/bin/Release/report_25
+/PropellerVisualization/bin/Release/report_20
+/PropellerVisualization/bin/Release/report_15
+/PropellerVisualization/bin/Release/report_1000
+/PropellerVisualization/bin/Release/report_100
+/PropellerVisualization/bin/Release/report_10
+/PropellerVisualization/bin/Release/report
+/PropellerVisualization/bin/Release/parse.py

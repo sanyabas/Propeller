@@ -1,0 +1,47 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly Propeller, Version=1.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class Propeller.Data: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Single, Single, Single, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Single NailX : Public
+    Single NailY : Public
+    Single PropellerX : Public
+    Single PropellerY : Public
+    Single Angle : Public
+Class Propeller.PropellerMath: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Single R IsConst : Public, Static
+    Single L_eff IsConst : Public, Static
+    Double A IsConst : Public, Static
+    Double Om IsConst : Public, Static
+    Double h IsConst : Public, Static
+    Double kappa IsConst : Public, Static
+    Double g0 IsConst : Public, Static
+    Double g : Public, Static
+    Boolean contact : Public, Static
+    Double alpha : Public, Static
+    Double alpha_new : Public, Static
+    Double omega : Public, Static
+    Double omega_new : Public, Static
+    Double x : Public, Static
+    Double y : Public, Static
+    Double vx : Public, Static
+    Double vy : Public, Static
+    Double ax : Public, Static
+    Double beta : Public, Static
+    Double epsilon : Public, Static
+    Double epsilon_new : Public, Static
+    Double ay : Public, Static
+    _iobuf* fout : Public, Static
+  Methods:
+    GetCurrentValues(Data, Int32): PrivateScope, Public, Static, HideBySig

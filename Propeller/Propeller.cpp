@@ -69,7 +69,9 @@
 
 		double x_LS = x;            //  координаты центра отверстия  
 		double y_LS = y_gvozd + y;  //  в лабораторной СО
+		gx = cos(n);
+		gy = sin(n);
 		fprintf(fout, "%d %g %g %g %g %g %g %g %.10g\n", contact, n*h, alpha_new, beta, omega, epsilon_new, ay, g, x_LS);
-		return gcnew Data(0,y_gvozd,x_LS,y_LS,alpha);
+		return gcnew Data(0,y_gvozd,x_LS,y_LS,alpha,gx,gy);
 	}
 //}

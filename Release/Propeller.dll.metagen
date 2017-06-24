@@ -10,13 +10,15 @@ Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e0
 Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
 Class Propeller.Data: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(Single, Single, Single, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Single, Single, Single, Single, Single, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     Single NailX : Public
     Single NailY : Public
     Single PropellerX : Public
     Single PropellerY : Public
     Single Angle : Public
+    Single Gx : Public
+    Single Gy : Public
 Class Propeller.PropellerMath: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:

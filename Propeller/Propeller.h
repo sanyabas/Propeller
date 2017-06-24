@@ -17,15 +17,19 @@ namespace Propeller {
 		float PropellerX;
 		float PropellerY;
 		float Angle;
+		float Gx;
+		float Gy;
 		
 
-		Data(float nailX, float nailY, float propellerX, float propellerY, float angle)
+		Data(float nailX, float nailY, float propellerX, float propellerY, float angle, float gx,float gy)
 		{
 			NailX = nailX;
 			NailY = nailY;
 			PropellerX = propellerX;
 			PropellerY = propellerY;
 			Angle = angle;
+			Gx = gx;
+			Gy = gy;
 		}
 	};
 
@@ -36,7 +40,7 @@ namespace Propeller {
 		static const float R = 0.0015; //радиус отверстия
 		static const float L_eff = (0.01*0.01 + 0.03*0.03) / (12 * R);
 		static const double A = 0.005;
-		static const double Om = 2 * Pi * 75;
+		static const double Om = 2 * Pi * 15;
 		static const double h = 0.0002;
 		static const double kappa = 0.2;
 		static const double g0 = 9.8;
@@ -52,6 +56,8 @@ namespace Propeller {
 		static double epsilon_new;
 		static double ay = -omega*omega*R*cos(alpha);
 		static FILE* fout = fopen("report_75", "wt");
+		static double gx;
+		static double gy;
 		
 		static Propeller::Data ^ GetCurrentValues(Propeller::Data ^ previous, int n);
 	};

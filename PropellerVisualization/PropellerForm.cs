@@ -18,11 +18,17 @@ namespace PropellerVisualization
         private const int Multiplier = 10000;
         private static float holeSize = PropellerMath.R * Multiplier;
         private RectangleF hole = new RectangleF(-holeSize, -holeSize, 2 * holeSize, 2 * holeSize);
-        private static PointF gCenter = new Point(800,250);
-        private static PointF gSign=new Point(730,70);
+        private static PointF gCenter = new Point(800,350);
+        private static PointF gSign=new Point(730,200);
         private static Font font=new Font(FontFamily.GenericSansSerif, 20);
         private static Pen gPen = new Pen(Color.Black, 3) { CustomEndCap = new AdjustableArrowCap(5, 5) };
         private const string gString = "g effective";
+        private static PointF NailOmegaPoint=new PointF(630,20);
+        private static PointF NailAmplPoint=new PointF(630,50);
+        private string nailOmegaString;
+        private string nailAmplString;
+        private static PropellerConsts values;
+
         private object locker=new object();
 
         public PropellerForm()
@@ -42,6 +48,7 @@ namespace PropellerVisualization
         private void PropellerFormPaint(Graphics graphics)
         {
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            DrawValues(graphics);
             DrawPropeller(graphics);
             DrawNail(graphics);
             DrawLine(graphics);
@@ -70,11 +77,10 @@ namespace PropellerVisualization
         private void DrawLine(Graphics graphics)
         {
             graphics.TranslateTransform(center.X, center.Y);
-            graphics.DrawLine(Pens.Red, 0, -Size.Height, 0, Size.Height);
+            graphics.DrawLine(Pens.Black, 0, -Size.Height, 0, Size.Height);
             graphics.ResetTransform();
             graphics.TranslateTransform(center.X, center.Y);
-            graphics.TranslateTransform(data.NailX * Multiplier, data.NailY * Multiplier);
-            graphics.DrawLine(Pens.Red,-Size.Width,0,Size.Width,0);
+            graphics.DrawLine(Pens.Black,-Size.Width,0,gCenter.X-500,0);
             graphics.ResetTransform();
 
         }
@@ -86,6 +92,18 @@ namespace PropellerVisualization
             graphics.DrawLine(gPen,0,0,data.Gx*100,data.Gy*100);
             graphics.ResetTransform();
             graphics.DrawString(gString,font,Brushes.Black,gSign);
+        }
+
+        private void DrawValues(Graphics graphics)
+        {
+            if (step == 0)
+            {
+                values = PropellerMath.GetConsts();
+                nailOmegaString = $"ω_nail={values.NailOmega} rad/s";
+                nailAmplString= $"A_nail={values.NailAmplitude} m";
+            }
+            graphics.DrawString(nailOmegaString,font,Brushes.Black, NailOmegaPoint);
+            graphics.DrawString(nailAmplString,font,Brushes.Black, NailAmplPoint);
         }
 
         private void TimerTick()

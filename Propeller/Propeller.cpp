@@ -74,4 +74,9 @@
 		fprintf(fout, "%d %g %g %g %g %g %g %g %.10g\n", contact, n*h, alpha_new, beta, omega, epsilon_new, ay, g, x_LS);
 		return gcnew Data(0,y_gvozd,x_LS,y_LS,alpha,gx,gy);
 	}
+
+Propeller::PropellerConsts ^ Propeller::PropellerMath::GetConsts()
+	{
+	return gcnew PropellerConsts(A, Om);
+	}
 //}

@@ -33,6 +33,19 @@ namespace Propeller {
 		}
 	};
 
+	public ref class PropellerConsts
+	{
+	public:
+		float NailAmplitude;
+		float NailOmega;
+
+		PropellerConsts(float nailAmp,float nailOm)
+		{
+			NailAmplitude = nailAmp;
+			NailOmega = nailOm;
+		}
+	};
+
 	public ref class PropellerMath
 	{
 		//Константы и текущие значения величин в СИ
@@ -60,6 +73,7 @@ namespace Propeller {
 		static double gy;
 		
 		static Propeller::Data ^ GetCurrentValues(Propeller::Data ^ previous, int n);
+		static PropellerConsts ^ GetConsts();
 	};
 
 	

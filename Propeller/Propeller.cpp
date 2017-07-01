@@ -3,80 +3,81 @@
 #include "stdafx.h"
 
 #include "Propeller.h"
-//namespace Propeller
-//{
-	//static Data GetCurrentValues(Data)
-	//{
-	//	double y_gvozd = -A*sin(Om*n*h);
-	//}
-	Propeller::Data ^ Propeller::PropellerMath::GetCurrentValues(Propeller::Data ^ previous, int n)
+namespace Propeller
+{
+	//using namespace Propeller;
+	Data ^ PropellerMath::GetCurrentValues(Data ^ previous, int n)
 	{
 		//Алгоритм пересчёта угла и положения пропеллера
-		double y_gvozd = -A*sin(Om*n*h);
-		double a_gvozd = A*Om*Om*sin(Om*n*h);
-		g = g0 - a_gvozd;
-		double g_old = 9.8 - A*Om*Om*sin(Om*(n - 1)*h);   // в системе отсчета гвоздика; —“ј–ќ≈
-		
+		double x_gvozd = A*sin(Om*n*h);
+		double y_gvozd = A*cos(Om*n*h);
+		double ax_gvozd = -A*Om*Om*sin(Om*n*h), ax_gvozd_new;
+		double ay_gvozd = -A*Om*Om*cos(Om*n*h), ay_gvozd_new;
+		gx = -ax_gvozd;
+		gy = g0 - ay_gvozd;
+		g_eff = sqrt(gx*gx + gy*gy);
+		if (gy >= 0) beta = atan(gx / gy);
+		else       beta = atan(gx / gy) + Pi;
+
+		ax_gvozd_new = -A*Om*Om*sin(Om*h*(n + 1)); // в лабораторной системе отсчета
+		ay_gvozd_new = -A*Om*Om*cos(Om*h*(n + 1)); // в лабораторной системе отсчета
+		gx_new = -ax_gvozd_new;   // в системе отсчета гвоздика; уже новое
+		gy_new = g0 - ay_gvozd_new;   // в системе отсчета гвоздика; уже новое
+		g_eff_new = sqrt(gx_new*gx_new + gy_new*gy_new);
+		if (gy_new >= 0) beta_new = atan(gx_new / gy_new);
+		else           beta_new = atan(gx_new / gy_new) + Pi;
+
+		while (beta_new < beta - 5)
+		{
+			beta_new += 2 * Pi;
+		}
+		while (beta_new > beta + 5)
+		{
+			beta_new -= 2 * Pi;
+		}
+
+		double Om_g_eff = (beta_new - beta) / h;
+
+
 		if (contact)
 		{
 			alpha_new = alpha + h*omega + 0.5*h*h*epsilon;
 			double omega_tmp = omega + h*epsilon;
-			epsilon_new = -g*sin(alpha_new) / L_eff - kappa*omega_tmp;
+			epsilon_new = -g_eff_new*sin(alpha_new - beta_new) / znamen - kappa*(omega_tmp - Om);
+			//epsilon_new = -g_eff*sin(alpha_new) / L_eff - kappa*omega_tmp;
 			omega_new = omega + 0.5*h*(epsilon + epsilon_new);
 
-			x = R*sin(alpha_new);
-			y = R*cos(alpha_new); // координаты центра масс пропеллера
-			vx = omega*R*cos(alpha_new);
-			vy = -omega*R*sin(alpha_new);
-			ax = -omega*omega*R*sin(alpha_new);  // центростремительное
-			ay = -omega*omega*R*cos(alpha_new);
+			x = (R - r)*sin(alpha_new);
+			y = (R - r)*cos(alpha_new); // координаты центра масс пропеллера
+										//vx = omega*R*cos(alpha_new);
+										//vy = -omega*R*sin(alpha_new);
+			ax = -omega*omega*(R - r)*sin(alpha_new);  // центростремительное
+			ay = -omega*omega*(R - r)*cos(alpha_new);
 
 			beta += h*omega + 0.5*h*h*epsilon;
-			
-			if (ay*g > 0 && ay*g < g*g)
-				contact = 0;
-		}
-		else
-		{
-			x += vx*h;
-			y += vy*h + 0.5*h*h*g_old;
-			vy += h*0.5*(g_old + g);
-						
-			beta += omega*h;
-			if (x*x + y*y >= R*R)
-			{
-				contact = 1;
-				if (y >= 0) alpha_new = atan(x / y);    // NEW 
-				else      alpha_new = atan(x / y) + Pi;   // NEW	 
-				//alpha_new = atan(x / y);
-				double ex = sin(alpha_new);
-				double ey = cos(alpha_new);
 
-				double v_perp_x = vx - ex*(vx*ex + vy*ey);
-				double v_perp_y = vy - ey*(vx*ex + vy*ey);
-
-				double omega_udar = sqrt(v_perp_x*v_perp_x + v_perp_y*v_perp_y) / R;
-
-				if (ex*v_perp_y - ey*v_perp_x > 0)  omega_udar *= -1;
-
-				omega_new = omega_new + omega_udar;			
-			}
 		}
 
 		alpha = alpha_new;
 		omega = omega_new;
 		epsilon = epsilon_new;
 
-		double x_LS = x;            //  координаты центра отверстия  
+		ax_gvozd = ax_gvozd_new; // в лабораторной системе отсчета
+		ay_gvozd = ay_gvozd_new; // в лабораторной системе отсчета
+		gx = gx_new;   // в системе отсчета гвоздика;
+		gy = gy_new;   // в системе отсчета гвоздика;
+		g_eff = g_eff_new;
+		beta = beta_new;
+
+		double x_LS = x_gvozd + x;            //  координаты центра отверстия  
 		double y_LS = y_gvozd + y;  //  в лабораторной СО
-		gx = cos(n);
-		gy = sin(n);
-		fprintf(fout, "%d %g %g %g %g %g %g %g %.10g\n", contact, n*h, alpha_new, beta, omega, epsilon_new, ay, g, x_LS);
-		return gcnew Data(0,y_gvozd,x_LS,y_LS,alpha,gx,gy);
+		fprintf(fout, "%g %g %g %g %g %g %g %.10g\n", n*h, alpha_new, beta, omega, epsilon_new, ay, g_eff, x_LS);
+		return gcnew Data(x_gvozd, y_gvozd, x_LS, y_LS, omega_new,(1 - r / R)*alpha,gx,gy);
 	}
 
-Propeller::PropellerConsts ^ Propeller::PropellerMath::GetConsts()
+	PropellerConsts ^ PropellerMath::GetConsts()
 	{
-	return gcnew PropellerConsts(A, Om);
+		return gcnew PropellerConsts(A, Om);
 	}
+}
 //}

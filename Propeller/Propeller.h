@@ -16,12 +16,13 @@ namespace Propeller {
 		float NailY;
 		float PropellerX;
 		float PropellerY;
+		float PropellerOmega;
 		float Angle;
 		float Gx;
 		float Gy;
 		
 
-		Data(float nailX, float nailY, float propellerX, float propellerY, float angle, float gx,float gy)
+		Data(float nailX, float nailY, float propellerX, float propellerY, float propellerOm, float angle, float gx,float gy)
 		{
 			NailX = nailX;
 			NailY = nailY;
@@ -30,6 +31,7 @@ namespace Propeller {
 			Angle = angle;
 			Gx = gx;
 			Gy = gy;
+			PropellerOmega = propellerOm;
 		}
 	};
 
@@ -50,27 +52,33 @@ namespace Propeller {
 	{
 		//Константы и текущие значения величин в СИ
 	public:
-		static const float R = 0.0015; //радиус отверстия
-		static const float L_eff = (0.01*0.01 + 0.03*0.03) / (12 * R);
-		static const double A = 0.005;
-		static const double Om = 2 * Pi * 15;
-		static const double h = 0.0002;
-		static const double kappa = 0.2;
-		static const double g0 = 9.8;
-		static double g = 9.8;
+		static const float a = 0.01; // сторона прямоугольного пропеллера
+		static const float b = 0.03; // сторона прямоугольного пропеллера
+		static const float R = 0.003; //радиус отверстия
+		static const float r = 0.002; //радиус гвоздика
+									  //static const float L_eff = (0.01*0.01 + 0.03*0.03) / (12 * R);
+		static const double znamen = R*(1 + (a*a + b*b) / (12 * R*R));
+
+		static const double A = 0.01;
+		static const double Om = 2 * Pi * 0.25;
+		static const double phi2 = 0.5 * Pi; // фаза у-колебаний гвоздика
+		static const double h = 0.003;
+		static const double kappa = 0.5;
+		static const double g0 = 0.1;
+		static double gx, gx_new;
+		static double gy, gy_new;
+		static double g_eff = sqrt(gx*gx + gy*gy), g_eff_new;
 		static bool contact = true;
-		static double alpha = 0.1; //угол поворота
+		static double alpha = 0.; //угол поворота
 		static double alpha_new;
 		static double omega = 0;
 		static double omega_new;
-		static double x,y,vx,vy,ax;
-		static double beta = alpha;
-		static double epsilon = -g*sin(alpha) / L_eff - kappa*omega;
+		static double x, y,/*vx,vy,*/ ax;
+		static double beta = alpha, beta_new;
+		static double epsilon = 0.;
 		static double epsilon_new;
 		static double ay = -omega*omega*R*cos(alpha);
 		static FILE* fout = fopen("report_75", "wt");
-		static double gx;
-		static double gy;
 		
 		static Propeller::Data ^ GetCurrentValues(Propeller::Data ^ previous, int n);
 		static PropellerConsts ^ GetConsts();
